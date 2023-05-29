@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsString } from 'class-validator';
 
 export class RegisterDTO {
   @IsNotEmpty()
@@ -15,11 +15,8 @@ export class RegisterDTO {
 
   @IsNotEmpty()
   @IsString()
-  hash_password: string;
+  hashPassword: string;
 
-  @IsString()
-  refreshToken: string;
-
-  @IsString()
+  @IsEmpty()
   role: string;
 }
