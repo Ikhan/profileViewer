@@ -3,8 +3,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { PermissionModule } from './permission/permission.module';
-import { RoleModule } from './role/role.module';
+import { PermissionsModule } from './permissions/permissions.module';
+import { RolesModule } from './roles/roles.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -12,10 +13,10 @@ import { RoleModule } from './role/role.module';
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }),
-
     AuthModule,
-    RoleModule,
-    PermissionModule,
+    RolesModule,
+    PermissionsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

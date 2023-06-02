@@ -1,8 +1,4 @@
-import {
-  ForbiddenException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
@@ -24,50 +20,42 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(
-    registerDTO: RegisterDTO,
-  ): Promise<{ fullname: string; username: string; email: string }> {
+  async register(registerDTO: RegisterDTO): Promise<{ fullname: string; username: string; email: string }> {
     const saltOrRound = 10;
 
     const { fullname, username, email } = registerDTO;
 
-    const hashPassword = await bcrypt.hash(
-      registerDTO.hashPassword,
-      saltOrRound,
-    );
+    const hashPassword = await bcrypt.hash(registerDTO.password, saltOrRound);
 
     const createUser = new this.authModel({
       fullname,
       username,
       email,
-      hashPassword,
+      password: hashPassword,
     });
 
     return createUser.save();
   }
 
   async findById(id: string): Promise<authDocument> {
-    const getUser = await this.authModel.findById(id);
+    const getUser = await this.authModel.findById(id).select('-password -__v');
     return getUser;
   }
 
   async signin(signInDto: SignInDTO): Promise<SignInResponse> {
     {
-      const { email, hashPassword } = signInDto;
+      const { email, password } = signInDto;
 
       try {
         //validate the user
-        const user = await this.validateUser(email, hashPassword);
+        const user = await this.validateUser(email, password);
         //genereteJWT
 
         const accessToken = await this.generateJWT(user);
 
         //generateRefreshToken
 
-        const refreshToken = await this.generateRefreshToken(
-          user._id.toString(),
-          7,
-        );
+        const refreshToken = await this.generateRefreshToken(user._id.toString(), 7);
 
         return {
           message: 'User Signed in successfully',
@@ -95,8 +83,7 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<authDocument> {
     const user = await this.authModel.findOne({ email });
 
-    const passwordCheck =
-      user && (await bcrypt.compare(password, user.hashPassword));
+    const passwordCheck = user && (await bcrypt.compare(password, user.password));
 
     if (!passwordCheck) {
       throw new ForbiddenException('invalid credentials');
@@ -114,10 +101,7 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  async generateRefreshToken(
-    userId: string,
-    expiresIn: number,
-  ): Promise<string> {
+  async generateRefreshToken(userId: string, expiresIn: number): Promise<string> {
     const user = await this.authModel.findById(userId);
 
     if (!user) {
@@ -140,9 +124,7 @@ export class AuthService {
       createdAt: Date.now(),
     });
 
-    refreshToken.createdAt.setSeconds(
-      refreshToken.createdAt.getSeconds() + expiresIn,
-    );
+    refreshToken.createdAt.setSeconds(refreshToken.createdAt.getSeconds() + expiresIn);
 
     await refreshToken.save();
 

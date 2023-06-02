@@ -15,7 +15,7 @@ export class Auth {
   email: string;
 
   @Prop({ required: true })
-  hashPassword: string;
+  password: string;
 }
 
 export const AuthSchema = SchemaFactory.createForClass(Auth);

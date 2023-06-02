@@ -15,7 +15,7 @@ export class RegisterDTO {
 
   @IsNotEmpty()
   @IsString()
-  hashPassword: string;
+  password: string;
 
   @IsEmpty()
   role: string;
