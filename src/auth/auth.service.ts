@@ -10,22 +10,9 @@ import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { RegisterDTO } from './dto/register.dto';
 import { SignInDTO } from './dto/signIn.dto';
+import { SignInResponse } from './interface/signInInterface';
 import { Auth, authDocument } from './schema/auth.schema';
 import { RefreshToken } from './schema/refreshToken.schema';
-
-interface SignInResponse {
-  message: string;
-  user: {
-    id: string;
-    fullname: string;
-    username: string;
-    email: string;
-  };
-  tokens: {
-    accessToken: string;
-    refreshToken: string;
-  };
-}
 
 @Injectable()
 export class AuthService {
