@@ -10,6 +10,7 @@ export class Permission {
 
   @Prop()
   action: string;
+
   @Prop()
   possession: string;
 }

@@ -1,4 +1,4 @@
 export enum Possession {
-  ANY = 'ANY',
-  OWN = 'OWN',
+  ANY = 'any',
+  OWN = 'own',
 }

@@ -1,16 +1,19 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AccessControlModule } from 'nest-access-control';
 import { AuthModule } from 'src/auth/auth.module';
 import { AuthService } from 'src/auth/auth.service';
 import { Auth, AuthSchema } from 'src/auth/schema/auth.schema';
 import { RefreshToken, RefreshTokenSchema } from 'src/auth/schema/refreshToken.schema';
 import { AtStrategy } from 'src/auth/strategy/at.strategy';
+import { roles } from 'src/roles/userRoles';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
 @Module({
   imports: [
+    AccessControlModule.forRoles(roles),
     MongooseModule.forFeature([{ name: Auth.name, schema: AuthSchema }]),
     MongooseModule.forFeature([{ name: RefreshToken.name, schema: RefreshTokenSchema }]),
     AuthModule,

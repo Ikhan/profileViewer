@@ -22,6 +22,6 @@ export class AtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new UnauthorizedException();
     }
 
-    return { id: user._id, email: user.email, username: user.username };
+    return { id: user._id, email: user.email, username: user.username, roles: user.roles };
   }
 }

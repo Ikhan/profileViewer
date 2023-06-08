@@ -1,4 +1,5 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { ACGuard, UseRoles } from 'nest-access-control';
 import { AuthService } from 'src/auth/auth.service';
 import { AtGuard } from 'src/utility/guard/AtGuard';
 
@@ -6,9 +7,18 @@ import { AtGuard } from 'src/utility/guard/AtGuard';
 export class UsersController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(AtGuard)
+  @UseGuards(AtGuard, ACGuard)
+  @UseRoles({
+    resource: 'profile',
+    action: 'read',
+    possession: 'any',
+  })
   @Get('/:id')
   async getUser(@Param('id') userId: string) {
-    return this.authService.findById(userId);
+    const user = await this.authService.findById(userId);
+    return {
+      message: 'User details',
+      user,
+    };
   }
 }

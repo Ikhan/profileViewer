@@ -1,11 +1,10 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsString } from 'class-validator';
 
 export class RolesDTO {
   @IsNotEmpty()
   @IsString()
   name: string;
 
-  @IsNotEmpty()
-  @IsArray()
+  @IsEmpty()
   permissions: string[];
 }

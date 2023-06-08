@@ -8,7 +8,7 @@ import { Permission } from './schema/permission.schema';
 export class PermissionsService {
   constructor(@InjectModel(Permission.name) private permisssionModel: Model<Permission>) {}
 
-  async create(permissionDTO: PermissionDTO) {
+  async create(permissionDTO: PermissionDTO): Promise<Permission> {
     const { resource, action, possession } = permissionDTO;
 
     const permission = new this.permisssionModel({
@@ -18,5 +18,6 @@ export class PermissionsService {
     });
 
     permission.save();
+    return permission;
   }
 }

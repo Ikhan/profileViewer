@@ -39,6 +39,7 @@ export class AuthService {
 
   async findById(id: string): Promise<authDocument> {
     const getUser = await this.authModel.findById(id).select('-password -__v');
+
     return getUser;
   }
 
@@ -97,6 +98,7 @@ export class AuthService {
       id: user._id.toString(),
       username: user.username,
       email: user.email,
+      roles: user.roles,
     };
     return this.jwtService.sign(payload);
   }
