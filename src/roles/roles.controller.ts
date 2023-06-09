@@ -12,8 +12,8 @@ export class RolesController {
     return await this.rolesService.create(roleDTO);
   }
 
-  @Put(':id/permissions/:permissionId')
-  async addPermissionToRole(@Param('id') id: string, @Param('permissionId') permissionId: string) {
+  @Put(':id/permissions')
+  async addPermissionToRole(@Param('id') id: string, @Body('permissionId') permissionId: string) {
     return this.rolesService.addPermissionToRole(id, permissionId);
   }
 }
