@@ -12,6 +12,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+  app.enableCors();
   // app.useGlobalFilters(new UnauthorizedExceptionFilter());
   await app.listen(3000);
 }

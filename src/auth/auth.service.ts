@@ -132,4 +132,14 @@ export class AuthService {
 
     return newRefreshToken;
   }
+
+  async logout(refreshToken: string): Promise<boolean> {
+    //find the userid
+
+    const deleteUser = await this.refreshTokenModel.deleteOne({ refreshToken: refreshToken });
+
+    if (deleteUser) {
+      return true;
+    }
+  }
 }
